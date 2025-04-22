@@ -457,13 +457,16 @@ local Window = CreateWindow()
 local PlantNode = Window:TreeNode({Title = "Auto-Plant 🥕"})
 
 -- Static seed list instead of GetSeedStock
-StaticSeedList = {
-    "Carrot",
-    "Tomato",
-    "Potato",
-    "Pumpkin",
-    "Strawberry",
-    "Mango"
+local StaticSeedList = {
+	"Carrot",
+	"Tomato",
+	"Potato",
+	"Pumpkin",
+	"Strawberry",
+	"Mango",
+	"Dragon Fruit",
+	"Candy Blossom",
+	"Red Lollipop"
 }
 
 SelectedSeed = PlantNode:Combo({

@@ -1,0 +1,109 @@
+-- Create ScreenGui
+local gui = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
+gui.Name = "SeedManagerGUI"
+
+-- Main Frame
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 300, 0, 200)
+frame.Position = UDim2.new(0.5, -150, 0.5, -100)
+frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+frame.BorderSizePixel = 0
+
+-- UI Corner
+Instance.new("UICorner", frame)
+
+-- TextBox to Add Seed
+local seedBox = Instance.new("TextBox", frame)
+seedBox.PlaceholderText = "Enter seed name"
+seedBox.Size = UDim2.new(1, -20, 0, 30)
+seedBox.Position = UDim2.new(0, 10, 0, 10)
+seedBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+seedBox.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", seedBox)
+
+-- Add Button
+local addButton = Instance.new("TextButton", frame)
+addButton.Text = "Add Seed"
+addButton.Size = UDim2.new(0.5, -15, 0, 30)
+addButton.Position = UDim2.new(0, 10, 0, 50)
+addButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+addButton.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", addButton)
+
+-- Dropdown (List)
+local dropdown = Instance.new("TextButton", frame)
+dropdown.Size = UDim2.new(1, -20, 0, 30)
+dropdown.Position = UDim2.new(0, 10, 0, 90)
+dropdown.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+dropdown.TextColor3 = Color3.new(1, 1, 1)
+dropdown.Text = "Select seed to delete"
+Instance.new("UICorner", dropdown)
+
+-- Delete Button
+local deleteButton = Instance.new("TextButton", frame)
+deleteButton.Text = "Delete Selected"
+deleteButton.Size = UDim2.new(1, -20, 0, 30)
+deleteButton.Position = UDim2.new(0, 10, 0, 130)
+deleteButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+deleteButton.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", deleteButton)
+
+-- Currently selected seed
+local selectedSeed = nil
+
+-- Dropdown Menu List
+local function updateDropdown()
+    local menu = Instance.new("Frame", frame)
+    menu.Name = "DropdownMenu"
+    menu.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    menu.Position = dropdown.Position + UDim2.new(0, 0, 0, dropdown.Size.Y.Offset)
+    menu.Size = UDim2.new(1, -20, 0, #getgenv().StaticSeedList * 25)
+    menu.ClipsDescendants = true
+
+    for i, seed in ipairs(getgenv().StaticSeedList) do
+        local option = Instance.new("TextButton", menu)
+        option.Size = UDim2.new(1, 0, 0, 25)
+        option.Position = UDim2.new(0, 0, 0, (i - 1) * 25)
+        option.Text = seed
+        option.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
+        option.TextColor3 = Color3.new(1, 1, 1)
+
+        option.MouseButton1Click:Connect(function()
+            selectedSeed = seed
+            dropdown.Text = "Selected: " .. seed
+            menu:Destroy()
+        end)
+    end
+end
+
+-- Events
+addButton.MouseButton1Click:Connect(function()
+    local text = seedBox.Text
+    if text ~= "" then
+        table.insert(getgenv().StaticSeedList, text)
+        seedBox.Text = ""
+        print("Added seed:", text)
+    end
+end)
+
+dropdown.MouseButton1Click:Connect(function()
+    if frame:FindFirstChild("DropdownMenu") then
+        frame:FindFirstChild("DropdownMenu"):Destroy()
+    else
+        updateDropdown()
+    end
+end)
+
+deleteButton.MouseButton1Click:Connect(function()
+    if selectedSeed then
+        for i, v in ipairs(getgenv().StaticSeedList) do
+            if v == selectedSeed then
+                table.remove(getgenv().StaticSeedList, i)
+                print("Removed seed:", selectedSeed)
+                dropdown.Text = "Select seed to delete"
+                selectedSeed = nil
+                break
+            end
+        end
+    end
+end)

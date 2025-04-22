@@ -457,20 +457,20 @@ local Window = CreateWindow()
 local PlantNode = Window:TreeNode({Title = "Auto-Plant 🥕"})
 
 -- Static seed list instead of GetSeedStock
-local StaticSeedList = {
-	"Carrot",
-	"Tomato",
-	"Potato",
-	"Pumpkin",
-	"Strawberry",
-  "Mango"
+getgenv().StaticSeedList = {
+    "Carrot",
+    "Tomato",
+    "Potato",
+    "Pumpkin",
+    "Strawberry",
+    "Mango"
 }
 
 SelectedSeed = PlantNode:Combo({
 	Label = "Seed",
 	Selected = "",
 	GetItems = function()
-		return StaticSeedList
+		return getgenv().StaticSeedList
 	end,
 })
 
